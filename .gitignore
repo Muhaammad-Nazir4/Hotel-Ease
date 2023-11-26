@@ -1,0 +1,2 @@
+# Ignore Node.js modules in the backend folder
+backend/node_modules/
