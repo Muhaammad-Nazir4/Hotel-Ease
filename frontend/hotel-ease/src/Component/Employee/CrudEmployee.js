@@ -38,7 +38,7 @@ const EmployeeManagement = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        console.log(data);
+        // console.log(data);
         setEmployees(data.Employee);
       } else {
         console.error("error in fetching data 1 ");
@@ -72,7 +72,7 @@ const EmployeeManagement = () => {
 
   const handleInputChangeEdit = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...editFormData, [name]: value });
+    setEditFormData({ ...editFormData, [name]: value });
   };
 
   const handleAddEmployee = async () => {
@@ -111,29 +111,30 @@ const EmployeeManagement = () => {
     setSelectedEmployeeId(null);
   };
 
+
   const EditEmployee = async () => {
     if (
-      formData.email === "" ||
-      formData.name === "" ||
-      formData.phoneNumber === "" ||
-      formData.address === ""
+      editFormData.email === "" ||
+      editFormData.name === "" ||
+      editFormData.phoneNumber === "" ||
+      editFormData.address === ""
     ) {
       alert("Please fill out the form");
       return;
     } else {
-      console.log(formData);
-      const url = `http://localhost:5000/Employee/EditEmployee/id=${EmployeeId}`;
+      const url = `http://localhost:5000/Employee/EditEmployee/${EmployeeId}`;
       try {
         const response = await fetch(url, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(editFormData),
         });
         const Data = await response.json();
         if (response.ok) {
           alert("Employee Edited Successfully");
+          fetchData(); // Fetch updated data after successful edit
         } else {
           console.error("Failed to submit the form");
         }
@@ -143,12 +144,11 @@ const EmployeeManagement = () => {
       }
     }
     setEditModalOpen(false);
-    setFormData(initialFormData);
+    setEditFormData(initialFormData);
     setSelectedEmployeeId(null);
   };
 
   const handleEditEmployee = (employeeId, dataBaseID) => {
-    alert(dataBaseID);
     setEmployeeId(dataBaseID);
     const selectedEmployee = employees.find(
       (employee) => employee.id === employeeId
